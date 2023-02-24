@@ -128,7 +128,6 @@ class ModuleManager : Listenable {
                 ServerCrasher::class.java,
                 NoFOV::class.java,
                 FastStairs::class.java,
-                SwingAnimation::class.java,
                 Derp::class.java,
                 ReverseStep::class.java,
                 TNTBlock::class.java,
@@ -184,6 +183,7 @@ class ModuleManager : Listenable {
         registerModule(ChestAura)
         registerModule(AntiBot)
         registerModule(Animations)
+        registerModule(Backtrack)
 
         ClientUtils.getLogger().info("[ModuleManager] Loaded ${modules.size} modules.")
     }
