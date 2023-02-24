@@ -70,4 +70,6 @@ public class Element extends MinecraftInstance {
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+
+    public boolean handleScroll(int mouseX, int mouseY, int wheel) { return false; }
 }

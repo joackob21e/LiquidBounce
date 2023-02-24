@@ -88,12 +88,16 @@ public abstract class Panel extends MinecraftInstance {
             if(++count > scroll && count < scroll + (maxElements + 1) && scroll < elements.size()) {
                 element.setLocation(x, y);
                 element.setWidth(getWidth());
-                if(y <= getY() + fade)
+                if(y <= getY() + fade) {
                     element.drawScreen(mouseX, mouseY, button);
+                }
+
                 y += element.getHeight() + 1;
                 element.setVisible(true);
-            }else
+            }else{
                 element.setVisible(false);
+            }
+
         }
     }
 
@@ -156,6 +160,13 @@ public abstract class Panel extends MinecraftInstance {
 
             return true;
         }
+
+        for (final Element element : elements) {
+            if (element.getY() <= getY() + fade && element.handleScroll(mouseX, mouseY, wheel)) {
+                return true;
+            }
+        }
+
         return false;
     }
 

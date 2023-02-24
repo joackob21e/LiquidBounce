@@ -7,11 +7,14 @@ package net.ccbluex.liquidbounce.ui.client.clickgui.elements;
 
 import net.ccbluex.liquidbounce.LiquidBounce;
 import net.ccbluex.liquidbounce.features.module.Module;
+import net.ccbluex.liquidbounce.value.Value;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Mouse;
+
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class ModuleElement extends ButtonElement {
@@ -22,8 +25,10 @@ public class ModuleElement extends ButtonElement {
     private float settingsWidth = 0F;
     private boolean wasPressed;
 
-    public int slowlySettingsYPos;
+    public int settingHeight;
     public int slowlyFade;
+
+    public int settingScrollIndex;
 
     public ModuleElement(final Module module) {
         super(null);
@@ -51,6 +56,36 @@ public class ModuleElement extends ButtonElement {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean handleScroll(int mouseX, int mouseY, int wheel) {
+        final List<Value<?>> moduleValues = getModule().getValues();
+
+        if(isHoveringSettings(mouseX, mouseY) && isVisible() && showSettings && !moduleValues.isEmpty()) {
+            if(wheel < 0 && settingScrollIndex < moduleValues.size() - 15) {
+                ++settingScrollIndex;
+                if(settingScrollIndex < 0)
+                    settingScrollIndex = 0;
+            }else if(wheel > 0) {
+                --settingScrollIndex;
+                if(settingScrollIndex < 0)
+                    settingScrollIndex = 0;
+            }
+
+            return true;
+        }
+
+        return super.handleScroll(mouseX, mouseY, wheel);
+    }
+
+    public boolean isHoveringSettings(int mouseX, int mouseY) {
+        final int x = getX() + getWidth() + 4;
+        final int y = getY() + 6;
+        final int xEnd = getX() + getWidth() + (int) getSettingsWidth();
+        final int yEnd = settingHeight + 2;
+
+        return mouseX >= x && mouseX <= xEnd && mouseY >= y && mouseY <= yEnd;
     }
 
     public Module getModule() {
